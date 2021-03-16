@@ -1,0 +1,186 @@
+---
+title: "Taller de R: Estadística y programación"
+subtitle: "Lectura 8: Crear funciones en R"
+author: "Eduard Martinez"
+date: "Universidad de los Andes | [ECON-1302](https://github.com/taller-R)"
+output: 
+  xaringan::moon_reader:
+    css: [fc , default , default-fonts] 
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+# load packages
+library(pacman)
+pacman::p_load(here,knitr,kableExtra,tidyverse,viridis,)
+
+# option html
+options(htmltools.dir.version = FALSE)
+opts_chunk$set(fig.align="center", fig.height=4 , dpi=300 , cache=T)
+
+# generate data
+#geih = 
+```
+
+# Ya vimos
+
+1. Bucles o loops en R - [[Ver repositorio aquí]](https://github.com/taller-R/clase_7)
+
+--
+
+# Hoy veremos 
+
+1. [function()](#intro)
+
+    1.1. Estructura de una funcíón
+
+2. [Controles de flujo](#flow)
+
+    2.1. message, warning y error
+
+3. [Depurar errores (Debugging)](#error)
+
+    3.1. traceback, debug y recover
+
+
+<!---------------->
+<!--- function --->
+<!---------------->
+---
+class: inverse, center, middle
+name: intro
+# function()
+
+<html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
+
+Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+
+---
+# Cuerpo de una función
+
+El cuerpo de la función `function` se compone de 3 partes:
+
+* Argumentos o insumos de la función
+* Cuerpo de la función
+* Producto o salida de la función
+
+```{r,eval=F,include=T}
+nombre_funcion <- function(argumentos){
+                  * Que queremos que haga la función
+                  * Resultado de la función
+}
+```
+
+`i` objeto local del loop (asume un valor diferente de `vector` en cada iteración). Cuando termina de ejecutarse la sentencia dentro de `{}`, el loop pasará al siguiente elmento del vector y así hasta que se haya ejecutado la senetencia sobre todos los elementos de `vector`.
+
+`vector` contiene los elementos sobre los que se va a iterar la sentencia del loop. 
+
+`{}` contiene la sentencia o acciones que se ejecutan dentro del loop.
+
+**Nota:** cada acción que se quiera ejecutar en la sentencia se debe escribir en una línea de código diferente (a menos que se use el operador `%>%` o el operador `;`). 
+
+---
+# Veamos un ejemplo()
+
+* pasos  de hacer una función debemos:
+
+1. Debemos hacerlo para un caso, antes de generalizar la función.
+
+2. Tener claro el tipo de objeto que espero obtener de la función.
+
+3.Cuando estamos probando una función es importante incorporar dentro del cuerpo de esta alguna función que nos permitan controlar el avance de la función.
+
+```{r,eval=F,include=T}
+### función que limpia los caracteres
+f_caracter <- function(x){ 
+           x = x %>% toupper(.) %>% trimws(.)
+return(x)
+}
+f_caracter(" Buenos Dias ")
+```
+
+
+<!-------------------------->
+<!--- Controles de flujo --->
+<!-------------------------->
+---
+class: inverse, center, middle
+name: flow
+# Controles de flujo
+
+<html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
+
+Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+
+---
+# Funciones de control dentro de una función.
+
+Debuguear un código es el proceso de proceso de identificar y corregir errores dentro de él. R tiene varias maneras de indicar cuando algo falla en la ejecución de un fragmento de código, las cuales son importantes conocer para disminuir el tiempo que requiere esta tarea. Cuando ejecutamos cualquier función en R podemos obtener los siguientes resultados:
+
+* `message:` es una notificación que generamos con la función `message()`. Despues de aplicar esta función, la función sigue ejecutándose.
+
+* `warning:` es una notificación que generamos con la función `warning()`, generalmente indica que hay algo que debemos tener en cuenta. Sin embargo, despues de aplicarse la función sigue ejecutándose.
+
+* `error:`  es una notificación de que ocurrió un error importante, se genera con la funcion `stop()`. Después de ejecutarse. la función no sigue ejecutándose.
+
+
+
+
+<!-------------------------->
+<!--- Controles de flujo --->
+<!-------------------------->
+---
+class: inverse, center, middle
+name: error
+# Depurar errores (Debugging)
+
+<html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
+
+Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+
+---
+# Depurar errores (Debugging)
+
+* `traceback:` esta función imprime sobre la consola la pila de funciones llamadas luego de que un error fatal ocurra.
+* `debug:` con esta función se inicia un depurador interactivo (conocido como browser en R) que permite ir paso a paso a través de la ejecución de una función hasta encontrar donde el error ocurre.
+
+* `recover:` con esta función podemos modificar la respuesta de R después de un error. Por ejemplo, con `recover` podemos indicarle a R que detenga la ejecución de la función en el punto exacto donde ocurre el error.
+
+<!--------------------->
+<!---    Hoy vimos  --->
+<!--------------------->
+---
+class: inverse, center, middle
+
+# Hoy vimos...
+<html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
+
+---
+#  Hoy vimos...
+
+- ☑ [Bucles o ciclos](#loops)
+
+- ☑ [Controles de flujo](#flow)
+
+- ☑ [Familia apply](#family)
+
+---
+# Vamos a replicar la clase...
+
+<div align="center">
+<img src="pics/run_class.gif" height=550>
+</div>
+
+
+
+
+
+
+
+
+
+
