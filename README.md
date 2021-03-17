@@ -18,7 +18,7 @@ Nota: Para hacerlo de las formas **1.2.** o **1.3.** debe verificar si ya tiene 
 
 La clase está orientada a 2 objetivos: 
 
-- 2.1. Introducir a los estudiantes sobre los conceptos de R a desarrollar en la clase. La presentación de la clase se encuentran en la carpeta **help** bajo el nombre **intro-to-class.html**.
+- 2.1. Introducir a los estudiantes sobre los conceptos de R a desarrollar en la clase. La presentación de la clase se encuentran en la carpeta **lecture** bajo el nombre **intro-to-class.html**.
 
 - 2.2. Aplicar los conceptos vistos en clase. Para cumplir con este objetivo, el estudiante deberá revisar el script de la clase que se encuentra en la carpeta **scr** y resolver algunos task que se encuentran a los largo de este.
 
