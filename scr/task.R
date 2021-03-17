@@ -37,17 +37,45 @@ saveRDS(lista_data,"data/output/lista siedco.rds")
 #----------------------------------#
 
 # Importar archivo "lista siedco.rds" de data/output
-
+ldata = readRDS("data/output/lista siedco.rds")
 
 # Verificar visualmente los datos
+ldata[[1]] #Muestra elemento 1
+ldata[[10]] #Muestra elemento 10
 
+df1=ldata[[1]]
+df10=ldata[[10]]
 
+View(df10)
 # Limpiar una base de datos
+##Quitar las filas de NA
+df_i = ldata[[4]]
+df_i=subset(df_i,is.na(...2)==F)
+
+##Hacer que mis nombres sean la nueva fila 1
+colnames(df_i)=df_i[1,]
+## Ahora elimino la primea fila 
+df_i = df_i[-1,]
 
 
 # Generalizar el paso anterior en una funcion
+f_clean = function(i){
+  df_i=ldata[[i]]
+  df_i=subset(df_i, is.na(...2)==F) #elimino obs no relevantes
+  colnames(df_i)=df_i[1,]
+  df_i=df_i[-1,]
+return(df_i)
+}
 
+#Aplicar la funcion 
+data = lapply(1:14, function(x) f_clean(i=x))
 
+#Veamos elemento de la lista
+dc1 = data[[1]]
+dc10 = data[[10]]
+
+#Aplicar un dataframe
+dataframe = rbindlist(l = data,use.names = ,fill=T)
 
 
 
