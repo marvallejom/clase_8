@@ -1,0 +1,17 @@
+base
+pacman
+here
+knitr
+kableExtra
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+viridisLite
+viridis
+data.table

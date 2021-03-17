@@ -1,22 +1,22 @@
 ---
 title: "Taller de R: Estadística y programación"
 subtitle: "Lectura 8: Crear funciones en R"
-author: "Eduard Martinez"
+author: "Eduard Martínez"
 date: "Universidad de los Andes | [ECON-1302](https://github.com/taller-R)"
 output: 
-  xaringan::moon_reader:
-    css: [fc , default , default-fonts] 
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+       xaringan::moon_reader:
+                 css: [fc , default , default-fonts] 
+                 lib_dir: libs
+                 nature:
+                 highlightStyle: github
+                 highlightLines: true
+                 countIncrementalSlides: false
 ---
 
 ```{r setup, include=FALSE}
 # load packages
 library(pacman)
-pacman::p_load(here,knitr,kableExtra,tidyverse,viridis,)
+pacman::p_load(here,knitr,kableExtra,tidyverse,data.table)
 
 # option html
 options(htmltools.dir.version = FALSE)
@@ -36,15 +36,13 @@ opts_chunk$set(fig.align="center", fig.height=4 , dpi=300 , cache=T)
 
 1. [function()](#intro)
 
-    1.1. Estructura de una funcíón
+    1.1. Estructura de una función
 
-2. [Controles de flujo](#flow)
+2. [Depurar errores (Debugging)](#error)
 
-    2.1. message, warning y error
+    2.1. `message`, `warning` y `error`
 
-3. [Depurar errores (Debugging)](#error)
-
-    3.1. traceback, debug y recover
+    2.2. `traceback`, `debug` y `recover`
 
 
 <!---------------->
@@ -53,100 +51,146 @@ opts_chunk$set(fig.align="center", fig.height=4 , dpi=300 , cache=T)
 ---
 class: inverse, center, middle
 name: intro
-# function()
+# `function()`
 
 <html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
 
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogéneos para obtener un resultado.
 
 ---
-# Cuerpo de una función
+# Estructura de una función
 
-El cuerpo de la función `function` se compone de 3 partes:
-
-* Argumentos o insumos de la función
-* Cuerpo de la función
-* Producto o salida de la función
+Para crear una función en R usando la función `function` se debe definir mínimo 3 elementos: **nombre de la función**, **argumentos** y **cuerpo de la función**.
 
 ```{r,eval=F,include=T}
 nombre_funcion <- function(argumentos){
-                  * Que queremos que haga la función
-                  * Resultado de la función
+                  Cuerpo de la función
+return(Output de la función)
 }
 ```
 
-`i` objeto local del loop (asume un valor diferente de `vector` en cada iteración). Cuando termina de ejecutarse la sentencia dentro de `{}`, el loop pasará al siguiente elmento del vector y así hasta que se haya ejecutado la senetencia sobre todos los elementos de `vector`.
+`nombre_funcion` el nombre que se le asigna al objeto que contiene la función.
 
-`vector` contiene los elementos sobre los que se va a iterar la sentencia del loop. 
+`function()` se usa para crear una función en R. Dentro de `()` se definen los nombres de los argumentos que serán usados en el cuerpo de la función. Estos argumentos pueden ser objetos que se almacenan (temporalmente) en el entorno de R durante la ejecución de la función.
 
-`{}` contiene la sentencia o acciones que se ejecutan dentro del loop.
+`{}` contiene el cuerpo de la función, es decir las acciones que se van a realizar cuando se ejecute la función.
+
+`return()` se define el resultado de la función. Cuando no se define, el `return()`, `function()` retorna el resultado de la ultima línea de código que se ejecuta en el cuerpo de la función.
 
 **Nota:** cada acción que se quiera ejecutar en la sentencia se debe escribir en una línea de código diferente (a menos que se use el operador `%>%` o el operador `;`). 
 
 ---
-# Veamos un ejemplo()
+# Veamos un ejemplo (...)
 
-* pasos  de hacer una función debemos:
-
-1. Debemos hacerlo para un caso, antes de generalizar la función.
-
-2. Tener claro el tipo de objeto que espero obtener de la función.
-
-3.Cuando estamos probando una función es importante incorporar dentro del cuerpo de esta alguna función que nos permitan controlar el avance de la función.
-
-```{r,eval=F,include=T}
-### función que limpia los caracteres
-f_caracter <- function(x){ 
-           x = x %>% toupper(.) %>% trimws(.)
-return(x)
+```{r,eval=T,include=T}
+### función que limpia los carácteres
+f_caracter <- function(caracter){ 
+              resultado = toupper(caracter) %>% 
+                          trimws()
+return(resultado)
 }
-f_caracter(" Buenos Dias ")
+f_caracter(caracter = " Buenos Dias ")
+f_caracter(caracter = 2)
 ```
 
+`f_caracter` es el nombre del objeto que contiene la función `function()` definida. En esta función se define solo un argumento (`caracter`).
 
-<!-------------------------->
-<!--- Controles de flujo --->
-<!-------------------------->
----
-class: inverse, center, middle
-name: flow
-# Controles de flujo
-
-<html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
-
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+La función crea un objeto llamado `resultado` que contiene el resultado de convertir a mayúsculas (`toupper`) y elimina los espacios (`trimws`) del argumento `caracter`. Finalmente la función retorna el objeto `resultado`.
 
 ---
-# Funciones de control dentro de una función.
+# Veamos un ejemplo (...)
 
-Debuguear un código es el proceso de proceso de identificar y corregir errores dentro de él. R tiene varias maneras de indicar cuando algo falla en la ejecución de un fragmento de código, las cuales son importantes conocer para disminuir el tiempo que requiere esta tarea. Cuando ejecutamos cualquier función en R podemos obtener los siguientes resultados:
+```{r,eval=T,include=T,warning=F}
+#### Función que retorna la raíz cuadrada de un numero
+funcion_rc <- function(numero){
+              numero = sqrt(numero)  
+              print(numero)
+}
+funcion_rc(25)
+funcion_rc(-100)
+```
 
-* `message:` es una notificación que generamos con la función `message()`. Despues de aplicar esta función, la función sigue ejecutándose.
+`funcion_rc` es el nombre del objeto que contiene la función `function()` definida. En esta función se define solo un argumento (`numero`). La función retorna la raíz cuadrada del argumento `numero`.
 
-* `warning:` es una notificación que generamos con la función `warning()`, generalmente indica que hay algo que debemos tener en cuenta. Sin embargo, despues de aplicarse la función sigue ejecutándose.
+**Nota:** esta función no tiene definido que debe hacer cuando el valor ingresado en el argumento `numero` no tiene definida una raíz cuadrada.
 
-* `error:`  es una notificación de que ocurrió un error importante, se genera con la funcion `stop()`. Después de ejecutarse. la función no sigue ejecutándose.
-
-
-
-
-<!-------------------------->
-<!--- Controles de flujo --->
-<!-------------------------->
+<!----------------------->
+<!--- Depurar errores --->
+<!----------------------->
 ---
 class: inverse, center, middle
 name: error
-# Depurar errores (Debugging)
+# Depurar errores (`Debugging`)
 
 <html><div style='float:left'></div><hr color='#FF007F' size=1px width=796px></html>
 
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+Debuguear un código es el proceso de identificar un error que se pueda presentar en la ejecución de una función y corregirlo. 
 
 ---
-# Depurar errores (Debugging)
+# Notificaciones en una función
 
-* `traceback:` esta función imprime sobre la consola la pila de funciones llamadas luego de que un error fatal ocurra.
-* `debug:` con esta función se inicia un depurador interactivo (conocido como browser en R) que permite ir paso a paso a través de la ejecución de una función hasta encontrar donde el error ocurre.
+Cuando se ejecuta un función en R, puede pintarse sobre la consola algunas notificaciones de alerta. Estas notificaciones se pueden incorporar a `function()` así:
+
+* `message:` esta notificación se genera con la función `message()`. Despues de pintar el `message` sobre la consola, la función sigue ejecutándose.
+
+* `Warning message:` esta notificación se genera con la función `warning()`, este tipo de notificaciones se usa para sugerirle al usuario que debe validar si el objeto sobre el que se está aplicando la función cumple con los requisitos para que la función se ejecute correctamente. Sin embargo, después de pintar el `Warning message` sobre la consola, la función sigue ejecutándose.
+
+* `Error in...` se genera con la función `stop()`. Esta notificación se incorpora a `function()` para que cuando se cumpla determinada condición la función no continúe ejecutándose.
+
+---
+# Veamos un ejemplo (...)
+
+```{r,eval=T,include=T}
+funcion_rc <- function(numero){
+  
+            # Si es mayor o igual a cero aplicar la raiz cuadrada
+            if (numero >= 0){
+                resultado <- sqrt(numero)  
+            return(resultado)
+            }  
+            
+            # Si es menor a cero
+            if (numero < 0){
+                warning(paste0("Advertencia! se reporta raíz(|",numero,"|)"))
+                numero <- abs(numero) %>% sqrt(.)  
+            return(numero)
+            }
+}
+funcion_rc(-100)
+
+funcion_rc(0)
+```
+
+---
+# Veamos un ejemplo (...)
+
+```{r,eval=T,include=T}
+### función que limpia los caracteres
+funcion_palabra <- function(palabra){
+  
+                    # Si es un carácter
+                    if (is.character(palabra) == TRUE){
+                    resultado = toupper(palabra) %>% 
+                                trimws()
+                    return(resultado)
+                    }  
+                    
+                    # Si no es un caracter
+                    if (is.character(palabra) == FALSE){
+                        stop(paste(palabra," no es una cadena de caracteres"))
+                    }
+}
+funcion_palabra("hola")
+```
+
+---
+# Funciones para depurar errores
+
+Para depurar una función, podemos emplear las siguientes funciones:
+
+* `traceback:` esta función imprime sobre la consola la pila de funciones llamadas luego de que un error fatal ocurre.
+
+* `debug:` esta función inicia un depurador interactivo (conocido como browser en R) que permite ir paso a paso a través de la ejecución de una función hasta encontrar donde el error ocurre.
 
 * `recover:` con esta función podemos modificar la respuesta de R después de un error. Por ejemplo, con `recover` podemos indicarle a R que detenga la ejecución de la función en el punto exacto donde ocurre el error.
 
@@ -169,10 +213,10 @@ class: inverse, center, middle
 - ☑ [Familia apply](#family)
 
 ---
-# Vamos a replicar la clase...
+# Vamos a R para aplicar los conceptos vistos en clase...
 
 <div align="center">
-<img src="pics/run_class.gif" height=550>
+<img src="pics/run_class.gif" height=450>
 </div>
 
 

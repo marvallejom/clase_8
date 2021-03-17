@@ -3,7 +3,7 @@
   <head>
     <title>Taller de R: Estadística y programación</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Eduard Martinez" />
+    <meta name="author" content="Eduard Martínez" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/fc.css" rel="stylesheet" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 
 # Taller de R: Estadística y programación
 ## Lectura 8: Crear funciones en R
-### Eduard Martinez
+### Eduard Martínez
 ### Universidad de los Andes | <a href="https://github.com/taller-R">ECON-1302</a>
 
 ---
@@ -33,15 +33,13 @@ class: center, middle, inverse, title-slide
 
 1. [function()](#intro)
 
-    1.1. Estructura de una funcíón
+    1.1. Estructura de una función
 
-2. [Controles de flujo](#flow)
+2. [Depurar errores (Debugging)](#error)
 
-    2.1. message, warning y error
+    2.1. `message`, `warning` y `error`
 
-3. [Depurar errores (Debugging)](#error)
-
-    3.1. traceback, debug y recover
+    2.2. `traceback`, `debug` y `recover`
 
 
 &lt;!----------------&gt;
@@ -50,102 +48,191 @@ class: center, middle, inverse, title-slide
 ---
 class: inverse, center, middle
 name: intro
-# function()
+# `function()`
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FF007F' size=1px width=796px&gt;&lt;/html&gt;
 
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogéneos para obtener un resultado.
 
 ---
-# Cuerpo de una función
+# Estructura de una función
 
-El cuerpo de la función `function` se compone de 3 partes:
-
-* Argumentos o insumos de la función
-* Cuerpo de la función
-* Producto o salida de la función
+Para crear una función en R usando la función `function` se debe definir mínimo 3 elementos: **nombre de la función**, **argumentos** y **cuerpo de la función**.
 
 
 ```r
 nombre_funcion &lt;- function(argumentos){
-                  * Que queremos que haga la función
-                  * Resultado de la función
+                  Cuerpo de la función
+return(Output de la función)
 }
 ```
 
-`i` objeto local del loop (asume un valor diferente de `vector` en cada iteración). Cuando termina de ejecutarse la sentencia dentro de `{}`, el loop pasará al siguiente elmento del vector y así hasta que se haya ejecutado la senetencia sobre todos los elementos de `vector`.
+`nombre_funcion` el nombre que se le asigna al objeto que contiene la función.
 
-`vector` contiene los elementos sobre los que se va a iterar la sentencia del loop. 
+`function()` se usa para crear una función en R. Dentro de `()` se definen los nombres de los argumentos que serán usados en el cuerpo de la función. Estos argumentos pueden ser objetos que se almacenan (temporalmente) en el entorno de R durante la ejecución de la función.
 
-`{}` contiene la sentencia o acciones que se ejecutan dentro del loop.
+`{}` contiene el cuerpo de la función, es decir las acciones que se van a realizar cuando se ejecute la función.
+
+`return()` se define el resultado de la función. Cuando no se define, el `return()`, `function()` retorna el resultado de la ultima línea de código que se ejecuta en el cuerpo de la función.
 
 **Nota:** cada acción que se quiera ejecutar en la sentencia se debe escribir en una línea de código diferente (a menos que se use el operador `%&gt;%` o el operador `;`). 
 
 ---
-# Veamos un ejemplo()
+# Veamos un ejemplo (...)
 
-* pasos  de hacer una función debemos:
 
-1. Debemos hacerlo para un caso, antes de generalizar la función.
+```r
+### función que limpia los carácteres
+f_caracter &lt;- function(caracter){ 
+              resultado = toupper(caracter) %&gt;% 
+                          trimws()
+return(resultado)
+}
+f_caracter(caracter = " Buenos Dias ")
+```
 
-2. Tener claro el tipo de objeto que espero obtener de la función.
+```
+## [1] "BUENOS DIAS"
+```
 
-3.Cuando estamos probando una función es importante incorporar dentro del cuerpo de esta alguna función que nos permitan controlar el avance de la función.
+```r
+f_caracter(caracter = 2)
+```
+
+```
+## [1] "2"
+```
+
+`f_caracter` es el nombre del objeto que contiene la función `function()` definida. En esta función se define solo un argumento (`caracter`).
+
+La función crea un objeto llamado `resultado` que contiene el resultado de convertir a mayúsculas (`toupper`) y elimina los espacios (`trimws`) del argumento `caracter`. Finalmente la función retorna el objeto `resultado`.
+
+---
+# Veamos un ejemplo (...)
+
+
+```r
+#### Función que retorna la raíz cuadrada de un numero
+funcion_rc &lt;- function(numero){
+              numero = sqrt(numero)  
+              print(numero)
+}
+funcion_rc(25)
+```
+
+```
+## [1] 5
+```
+
+```r
+funcion_rc(-100)
+```
+
+```
+## [1] NaN
+```
+
+`funcion_rc` es el nombre del objeto que contiene la función `function()` definida. En esta función se define solo un argumento (`numero`). La función retorna la raíz cuadrada del argumento `numero`.
+
+**Nota:** esta función no tiene definido que debe hacer cuando el valor ingresado en el argumento `numero` no tiene definida una raíz cuadrada.
+
+&lt;!-----------------------&gt;
+&lt;!--- Depurar errores ---&gt;
+&lt;!-----------------------&gt;
+---
+class: inverse, center, middle
+name: error
+# Depurar errores (`Debugging`)
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FF007F' size=1px width=796px&gt;&lt;/html&gt;
+
+Debuguear un código es el proceso de identificar un error que se pueda presentar en la ejecución de una función y corregirlo. 
+
+---
+# Notificaciones en una función
+
+Cuando se ejecuta un función en R, puede pintarse sobre la consola algunas notificaciones de alerta. Estas notificaciones se pueden incorporar a `function()` así:
+
+* `message:` esta notificación se genera con la función `message()`. Despues de pintar el `message` sobre la consola, la función sigue ejecutándose.
+
+* `Warning message:` esta notificación se genera con la función `warning()`, este tipo de notificaciones se usa para sugerirle al usuario que debe validar si el objeto sobre el que se está aplicando la función cumple con los requisitos para que la función se ejecute correctamente. Sin embargo, después de pintar el `Warning message` sobre la consola, la función sigue ejecutándose.
+
+* `Error in...` se genera con la función `stop()`. Esta notificación se incorpora a `function()` para que cuando se cumpla determinada condición la función no continúe ejecutándose.
+
+---
+# Veamos un ejemplo (...)
+
+
+```r
+funcion_rc &lt;- function(numero){
+  
+            # Si es mayor o igual a cero aplicar la raiz cuadrada
+            if (numero &gt;= 0){
+                resultado &lt;- sqrt(numero)  
+            return(resultado)
+            }  
+            
+            # Si es menor a cero
+            if (numero &lt; 0){
+                warning(paste0("Advertencia! se reporta raíz(|",numero,"|)"))
+                numero &lt;- abs(numero) %&gt;% sqrt(.)  
+            return(numero)
+            }
+}
+funcion_rc(-100)
+```
+
+```
+## Warning in funcion_rc(-100): Advertencia! se reporta raíz(|-100|)
+```
+
+```
+## [1] 10
+```
+
+```r
+funcion_rc(0)
+```
+
+```
+## [1] 0
+```
+
+---
+# Veamos un ejemplo (...)
 
 
 ```r
 ### función que limpia los caracteres
-f_caracter &lt;- function(x){ 
-           x = x %&gt;% toupper(.) %&gt;% trimws(.)
-return(x)
+funcion_palabra &lt;- function(palabra){
+  
+                    # Si es un carácter
+                    if (is.character(palabra) == TRUE){
+                    resultado = toupper(palabra) %&gt;% 
+                                trimws()
+                    return(resultado)
+                    }  
+                    
+                    # Si no es un caracter
+                    if (is.character(palabra) == FALSE){
+                        stop(paste(palabra," no es una cadena de caracteres"))
+                    }
 }
-f_caracter(" Buenos Dias ")
+funcion_palabra("hola")
 ```
 
-
-&lt;!--------------------------&gt;
-&lt;!--- Controles de flujo ---&gt;
-&lt;!--------------------------&gt;
----
-class: inverse, center, middle
-name: flow
-# Controles de flujo
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FF007F' size=1px width=796px&gt;&lt;/html&gt;
-
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
+```
+## [1] "HOLA"
+```
 
 ---
-# Funciones de control dentro de una función.
+# Funciones para depurar errores
 
-Debuguear un código es el proceso de proceso de identificar y corregir errores dentro de él. R tiene varias maneras de indicar cuando algo falla en la ejecución de un fragmento de código, las cuales son importantes conocer para disminuir el tiempo que requiere esta tarea. Cuando ejecutamos cualquier función en R podemos obtener los siguientes resultados:
+Para depurar una función, podemos emplear las siguientes funciones:
 
-* `message:` es una notificación que generamos con la función `message()`. Despues de aplicar esta función, la función sigue ejecutándose.
+* `traceback:` esta función imprime sobre la consola la pila de funciones llamadas luego de que un error fatal ocurre.
 
-* `warning:` es una notificación que generamos con la función `warning()`, generalmente indica que hay algo que debemos tener en cuenta. Sin embargo, despues de aplicarse la función sigue ejecutándose.
-
-* `error:`  es una notificación de que ocurrió un error importante, se genera con la funcion `stop()`. Después de ejecutarse. la función no sigue ejecutándose.
-
-
-
-
-&lt;!--------------------------&gt;
-&lt;!--- Controles de flujo ---&gt;
-&lt;!--------------------------&gt;
----
-class: inverse, center, middle
-name: error
-# Depurar errores (Debugging)
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FF007F' size=1px width=796px&gt;&lt;/html&gt;
-
-Una función es la generalización de un código, de tal manera que permita iterar este código sobre un conjunto de objetos homogeneos para obtener un resultado.
-
----
-# Depurar errores (Debugging)
-
-* `traceback:` esta función imprime sobre la consola la pila de funciones llamadas luego de que un error fatal ocurra.
-* `debug:` con esta función se inicia un depurador interactivo (conocido como browser en R) que permite ir paso a paso a través de la ejecución de una función hasta encontrar donde el error ocurre.
+* `debug:` esta función inicia un depurador interactivo (conocido como browser en R) que permite ir paso a paso a través de la ejecución de una función hasta encontrar donde el error ocurre.
 
 * `recover:` con esta función podemos modificar la respuesta de R después de un error. Por ejemplo, con `recover` podemos indicarle a R que detenga la ejecución de la función en el punto exacto donde ocurre el error.
 
@@ -168,10 +255,10 @@ class: inverse, center, middle
 - ☑ [Familia apply](#family)
 
 ---
-# Vamos a replicar la clase...
+# Vamos a R para aplicar los conceptos vistos en clase...
 
 &lt;div align="center"&gt;
-&lt;img src="pics/run_class.gif" height=550&gt;
+&lt;img src="pics/run_class.gif" height=450&gt;
 &lt;/div&gt;
 
 
@@ -186,11 +273,7 @@ class: inverse, center, middle
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
-});
+<script>var slideshow = remark.create();
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
@@ -255,24 +338,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
-
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
-  }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
+})();</script>
 
 <script>
 slideshow._releaseMath = function(el) {
